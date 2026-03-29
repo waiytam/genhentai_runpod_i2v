@@ -1,0 +1,20 @@
+{
+  "input": {
+    "workflow": {
+      "84": {
+        "inputs": {
+          "clip_name": "umt5_xxl_fp16.safetensors",
+          "type": "wan",
+          "device": "default"
+        },
+        "class_type": "CLIPLoader"
+      }
+    },
+    "images": [
+      {
+        "name": "source_image.png",
+        "image": "<base64-encoded-png>"
+      }
+    ]
+  }
+}

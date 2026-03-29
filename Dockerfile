@@ -1,0 +1,45 @@
+# Base image: ComfyUI + comfy-cli + ComfyUI-Manager
+FROM runpod/worker-comfyui:5.5.1-base
+
+# Increase WebSocket polling interval so the worker waits 60 s between
+# "Still waiting..." log lines instead of the default ~10 s.
+ENV COMFY_POLLING_INTERVAL_MS=60000
+
+# Disable torch.compile (dynamo) to prevent compilation errors on non-H100 GPUs.
+ENV TORCHDYNAMO_DISABLE=1
+
+# ── Custom nodes ──────────────────────────────────────────────────────────────
+
+# ComfyUI-VideoHelperSuite (provides VHS_VideoCombine for MP4 video output)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git && \
+    pip install -r /comfyui/custom_nodes/ComfyUI-VideoHelperSuite/requirements.txt
+
+# ComfyUI-WanVideoWrapper (provides WanImageToVideoSVIPro, DiffusionModelLoaderKJ,
+# ScheduledCFGGuidance, ImageBatchExtendWithOverlap)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/kijai/ComfyUI-WanVideoWrapper.git && \
+    pip install -r /comfyui/custom_nodes/ComfyUI-WanVideoWrapper/requirements.txt
+
+# ComfyUI-KJNodes (provides ImageResizeKJv2)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
+    pip install -r /comfyui/custom_nodes/ComfyUI-KJNodes/requirements.txt
+
+# Patch the worker handler to also return VHS video (gifs) output alongside images.
+COPY patch_handler.py /tmp/patch_handler.py
+RUN python3 /tmp/patch_handler.py
+
+# ── Model download startup script ────────────────────────────────────────────
+# Models are NOT baked into the image. They live on a RunPod Network Volume
+# mounted at /runpod-volume. The download script checks for each file and
+# only downloads what is missing (idempotent — fast no-op on warm starts).
+
+COPY download_models.sh /download_models.sh
+RUN chmod +x /download_models.sh
+
+# Entrypoint wrapper: download missing models first, then start the worker.
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+CMD ["/entrypoint.sh"]
