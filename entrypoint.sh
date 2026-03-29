@@ -18,6 +18,24 @@ if [ -f /comfyui/extra_model_paths.yaml ] && ! grep -q "runpod_diffusion_models"
     >> /comfyui/extra_model_paths.yaml
 fi
 
+# Patch KJNodes get_sage_func to avoid unconditional sageattention import
+# when sage_attention == "disabled" (bug in model_optimization_nodes.py).
+python3 - <<'PYEOF'
+import re, pathlib
+p = pathlib.Path('/comfyui/custom_nodes/ComfyUI-KJNodes/nodes/model_optimization_nodes.py')
+if p.exists():
+    src = p.read_text(encoding='utf-8')
+    guard = 'def get_sage_func(sage_attention):\n    if sage_attention == "disabled":\n        return None\n'
+    if 'if sage_attention == "disabled"' not in src:
+        src = src.replace('def get_sage_func(sage_attention):\n', guard)
+        p.write_text(src, encoding='utf-8')
+        print('KJNodes: patched get_sage_func with disabled guard')
+    else:
+        print('KJNodes: get_sage_func already patched')
+else:
+    print('KJNodes: model_optimization_nodes.py not found, skipping patch')
+PYEOF
+
 echo "=== Checking/downloading models to network volume ==="
 /download_models.sh
 echo "=== Starting worker ==="
