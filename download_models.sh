@@ -55,7 +55,14 @@ download_if_missing "$VAE_DIR/wan_2.1_vae.safetensors" \
 download_if_missing "$CLIP_VIS_DIR/clip_vision_vit_h.safetensors" \
   "$HF_BASE/lllyasviel/misc/resolve/main/clip_vision_vit_h.safetensors"
 
-# ── SVI-Pro LoRAs (hardcoded in both workflows) ───────────────────────────────
+# ── SVI-Pro LoRAs ─────────────────────────────────────────────────────────────
+# v2.0 (non-pro) used by svi-pro-10s-v2test.json
+for f in \
+  "SVI_Wan2.2-I2V-A14B_high_noise_lora_v2.0.safetensors" \
+  "SVI_Wan2.2-I2V-A14B_low_noise_lora_v2.0.safetensors"; do
+  download_if_missing "$LORA_DIR/$f" "$HF_BASE/$LORA_REPO/$f"
+done
+# v2.0_pro kept for reference / future use
 for f in \
   "SVI_Wan2.2-I2V-A14B_high_noise_lora_v2.0_pro.safetensors" \
   "SVI_Wan2.2-I2V-A14B_low_noise_lora_v2.0_pro.safetensors"; do
