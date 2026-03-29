@@ -42,6 +42,13 @@ download_if_missing "$DIFF_DIR/smoothMixWan2214BI2V_i2vV20High.safetensors" \
 download_if_missing "$DIFF_DIR/smoothMixWan2214BI2V_i2vV20Low.safetensors" \
   "$HF_BASE/$LORA_REPO/smoothMixWan2214BI2V_i2vV20Low.safetensors"
 
+# v2test workflow: smoothMixWan22I2VT2V (non-quantized variant)
+download_if_missing "$DIFF_DIR/smoothMixWan22I2VT2V_i2vHigh.safetensors" \
+  "$HF_BASE/$LORA_REPO/smoothMixWan22I2VT2V_i2vHigh.safetensors"
+
+download_if_missing "$DIFF_DIR/smoothMixWan22I2VT2V_i2vLow.safetensors" \
+  "$HF_BASE/$LORA_REPO/smoothMixWan22I2VT2V_i2vLow.safetensors"
+
 # ── CLIP text encoder (fp16) ───────────────────────────────────────────────────
 # SVI-Pro uses fp16 CLIP (different from GGUF endpoint which uses fp8)
 download_if_missing "$CLIP_DIR/umt5_xxl_fp16.safetensors" \
