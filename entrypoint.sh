@@ -8,6 +8,9 @@
 # extra ComfyUI search paths, so no symlink is needed — just ensure the
 # models/ subdirectory exists before download_models.sh writes to it.
 mkdir -p /runpod-volume/models
+# DiffusionModelLoaderKJ requires models in diffusion_models/ type path.
+# Create the directory so worker-comfyui adds it as a ComfyUI search path.
+mkdir -p /runpod-volume/models/diffusion_models
 
 echo "=== Checking/downloading models to network volume ==="
 /download_models.sh

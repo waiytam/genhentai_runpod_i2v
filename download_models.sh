@@ -4,7 +4,7 @@
 set -e
 
 MODELS_DIR="/runpod-volume/models"
-CKPT_DIR="$MODELS_DIR/checkpoints"
+DIFF_DIR="$MODELS_DIR/diffusion_models"
 LORA_DIR="$MODELS_DIR/loras"
 CLIP_DIR="$MODELS_DIR/clip"
 VAE_DIR="$MODELS_DIR/vae"
@@ -32,12 +32,14 @@ download_if_missing() {
 }
 
 # ── Main models (SVI-Pro smoothMix dual checkpoint) ───────────────────────────
-# Note: These .safetensors models are loaded by DiffusionModelLoaderKJ from checkpoints/
+# DiffusionModelLoaderKJ (ComfyUI-WanVideoWrapper) scans the "diffusion_models"
+# folder type — NOT "checkpoints". Models must live in diffusion_models/ so that
+# ComfyUI auto-adds /runpod-volume/models/diffusion_models as a search path.
 
-download_if_missing "$CKPT_DIR/smoothMixWan2214BI2V_i2vV20High.safetensors" \
+download_if_missing "$DIFF_DIR/smoothMixWan2214BI2V_i2vV20High.safetensors" \
   "$HF_BASE/$LORA_REPO/smoothMixWan2214BI2V_i2vV20High.safetensors"
 
-download_if_missing "$CKPT_DIR/smoothMixWan2214BI2V_i2vV20Low.safetensors" \
+download_if_missing "$DIFF_DIR/smoothMixWan2214BI2V_i2vV20Low.safetensors" \
   "$HF_BASE/$LORA_REPO/smoothMixWan2214BI2V_i2vV20Low.safetensors"
 
 # ── CLIP text encoder (fp16) ───────────────────────────────────────────────────
