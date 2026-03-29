@@ -10,6 +10,8 @@
 mkdir -p /runpod-volume/models
 # DiffusionModelLoaderKJ requires models in diffusion_models/ type path.
 mkdir -p /runpod-volume/models/diffusion_models
+# UnetLoaderGGUF requires models in unet/ type path.
+mkdir -p /runpod-volume/models/unet
 
 # Safety: ensure diffusion_models is registered even if extra_model_paths.yaml
 # was regenerated at runtime by the base image startup scripts.

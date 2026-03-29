@@ -5,6 +5,7 @@ set -e
 
 MODELS_DIR="/runpod-volume/models"
 DIFF_DIR="$MODELS_DIR/diffusion_models"
+UNET_DIR="$MODELS_DIR/unet"
 LORA_DIR="$MODELS_DIR/loras"
 CLIP_DIR="$MODELS_DIR/clip"
 VAE_DIR="$MODELS_DIR/vae"
@@ -31,7 +32,15 @@ download_if_missing() {
   fi
 }
 
-# ── Main models (SVI-Pro smoothMix dual checkpoint) ───────────────────────────
+# ── GGUF models (UnetLoaderGGUF, used by 10s SVI-Pro GGUF workflow) ───────────
+# UnetLoaderGGUF scans the "unet" folder type.
+download_if_missing "$UNET_DIR/smoothMixWan22I2VT2V_i2vHigh-Q8_0.gguf" \
+  "$HF_BASE/$LORA_REPO/smoothMixWan22I2VT2V_i2vHigh-Q8_0.gguf"
+
+download_if_missing "$UNET_DIR/smoothMixWan22I2VT2V_i2vLow-Q8_0.gguf" \
+  "$HF_BASE/$LORA_REPO/smoothMixWan22I2VT2V_i2vLow-Q8_0.gguf"
+
+# ── Main models (SVI-Pro smoothMix dual checkpoint, fp16) ─────────────────────
 # DiffusionModelLoaderKJ (ComfyUI-WanVideoWrapper) scans the "diffusion_models"
 # folder type — NOT "checkpoints". Models must live in diffusion_models/ so that
 # ComfyUI auto-adds /runpod-volume/models/diffusion_models as a search path.
