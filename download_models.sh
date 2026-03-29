@@ -72,14 +72,17 @@ download_if_missing "$CLIP_VIS_DIR/clip_vision_vit_h.safetensors" \
   "$HF_BASE/lllyasviel/misc/resolve/main/clip_vision_vit_h.safetensors"
 
 # ── SVI-Pro LoRAs ─────────────────────────────────────────────────────────────
-# v2.0 (non-pro) used by svi-pro-10s-v2test.json
+# SVI Pro v2.0 rank-128 fp16 (Kijai fork, used by svi-pro-10s-v2test.json)
+SVI_REPO="Kijai/WanVideo_comfy/resolve/main/LoRAs/Stable-Video-Infinity/v2.0"
+download_if_missing "$LORA_DIR/SVI_v2_PRO_Wan2.2-I2V-A14B_HIGH_lora_rank_128_fp16.safetensors" \
+  "$HF_BASE/$SVI_REPO/SVI_v2_PRO_Wan2.2-I2V-A14B_HIGH_lora_rank_128_fp16.safetensors"
+download_if_missing "$LORA_DIR/SVI_v2_PRO_Wan2.2-I2V-A14B_LOW_lora_rank_128_fp16.safetensors" \
+  "$HF_BASE/$SVI_REPO/SVI_v2_PRO_Wan2.2-I2V-A14B_LOW_lora_rank_128_fp16.safetensors"
+
+# v2.0 (original format, kept for reference)
 for f in \
   "SVI_Wan2.2-I2V-A14B_high_noise_lora_v2.0.safetensors" \
-  "SVI_Wan2.2-I2V-A14B_low_noise_lora_v2.0.safetensors"; do
-  download_if_missing "$LORA_DIR/$f" "$HF_BASE/$LORA_REPO/$f"
-done
-# v2.0_pro kept for reference / future use
-for f in \
+  "SVI_Wan2.2-I2V-A14B_low_noise_lora_v2.0.safetensors" \
   "SVI_Wan2.2-I2V-A14B_high_noise_lora_v2.0_pro.safetensors" \
   "SVI_Wan2.2-I2V-A14B_low_noise_lora_v2.0_pro.safetensors"; do
   download_if_missing "$LORA_DIR/$f" "$HF_BASE/$LORA_REPO/$f"
