@@ -9,8 +9,14 @@
 # models/ subdirectory exists before download_models.sh writes to it.
 mkdir -p /runpod-volume/models
 # DiffusionModelLoaderKJ requires models in diffusion_models/ type path.
-# Create the directory so worker-comfyui adds it as a ComfyUI search path.
 mkdir -p /runpod-volume/models/diffusion_models
+
+# Safety: ensure diffusion_models is registered even if extra_model_paths.yaml
+# was regenerated at runtime by the base image startup scripts.
+if [ -f /comfyui/extra_model_paths.yaml ] && ! grep -q "runpod_diffusion_models" /comfyui/extra_model_paths.yaml; then
+  printf '\nrunpod_diffusion_models:\n    base_path: /runpod-volume/models\n    diffusion_models: diffusion_models/\n' \
+    >> /comfyui/extra_model_paths.yaml
+fi
 
 echo "=== Checking/downloading models to network volume ==="
 /download_models.sh

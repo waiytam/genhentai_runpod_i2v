@@ -26,6 +26,15 @@ RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
     pip install -r /comfyui/custom_nodes/ComfyUI-KJNodes/requirements.txt
 
+# Register /runpod-volume/models/diffusion_models as a ComfyUI search path.
+# worker-comfyui:5.5.1-base has a hardcoded whitelist of volume subdirectories
+# {checkpoints, clip, clip_vision, configs, controlnet, embeddings, loras,
+# upscale_models, vae, unet} — diffusion_models is NOT in this list.
+# DiffusionModelLoaderKJ (ComfyUI-WanVideoWrapper) scans ONLY the
+# "diffusion_models" folder type, so without this entry it always returns [].
+RUN printf '\nrunpod_diffusion_models:\n    base_path: /runpod-volume/models\n    diffusion_models: diffusion_models/\n' \
+    >> /comfyui/extra_model_paths.yaml || true
+
 # Patch the worker handler to also return VHS video (gifs) output alongside images.
 COPY patch_handler.py /tmp/patch_handler.py
 RUN python3 /tmp/patch_handler.py
