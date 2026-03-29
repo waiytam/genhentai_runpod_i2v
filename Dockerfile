@@ -26,6 +26,11 @@ RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/kijai/ComfyUI-KJNodes.git && \
     pip install -r /comfyui/custom_nodes/ComfyUI-KJNodes/requirements.txt
 
+# ComfyUI-GGUF (provides UnetLoaderGGUF for .gguf model files)
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/city96/ComfyUI-GGUF.git && \
+    pip install -r /comfyui/custom_nodes/ComfyUI-GGUF/requirements.txt
+
 # Register /runpod-volume/models/diffusion_models as a ComfyUI search path.
 # worker-comfyui:5.5.1-base has a hardcoded whitelist of volume subdirectories
 # {checkpoints, clip, clip_vision, configs, controlnet, embeddings, loras,
