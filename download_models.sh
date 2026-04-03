@@ -102,7 +102,11 @@ for f in \
   "wan22-k3nk4llinon3-16epoc-full-high-k3nk.safetensors" \
   "wan22-k3nk4llinon3-15epoc-full-low-k3nk.safetensors" \
   "bounce_test_HighNoise-000005.safetensors" \
-  "bounce_test_LowNoise-000005.safetensors"; do
+  "bounce_test_LowNoise-000005.safetensors" \
+  "2D_animation_effects_high_noise.safetensors" \
+  "2D_animation_effects_low_noise.safetensors" \
+  "wan2.2_i2v_animestyle_v2_high.safetensors" \
+  "wan2.2_i2v_animestyle_v2_low.safetensors"; do
   download_if_missing "$LORA_DIR/$f" "$HF_BASE/$LORA_REPO/$f"
 done
 
