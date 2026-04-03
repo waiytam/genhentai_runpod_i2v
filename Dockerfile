@@ -31,6 +31,11 @@ RUN cd /comfyui/custom_nodes && \
     git clone https://github.com/city96/ComfyUI-GGUF.git && \
     pip install -r /comfyui/custom_nodes/ComfyUI-GGUF/requirements.txt
 
+# rgthree-comfy (provides Power Lora Loader (rgthree))
+RUN cd /comfyui/custom_nodes && \
+    git clone https://github.com/rgthree/rgthree-comfy.git && \
+    pip install -r /comfyui/custom_nodes/rgthree-comfy/requirements.txt
+
 # Register /runpod-volume/models/diffusion_models as a ComfyUI search path.
 # worker-comfyui:5.5.1-base has a hardcoded whitelist of volume subdirectories
 # {checkpoints, clip, clip_vision, configs, controlnet, embeddings, loras,
